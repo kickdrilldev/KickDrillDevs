@@ -1,0 +1,152 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+
+plugins {
+    id "com.jfrog.bintray" version "1.7.3"
+}
+
+
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+
+group = 'com.app.kickdrill'
+version = '0.0.1'
+
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+def artifactid = 'androidKickdrill'
+def libversionname = '0.0.1'
+
+android {
+    publishNonDefault true
+    compileSdkVersion 23
+    buildToolsVersion '25.0.2'
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName = libversionname
+        project.archivesBaseName = artifactid + "-" + libversionname
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
+}
+
+
+
+
+
+dependencies {
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
+    compile 'com.android.support:design:23.4.0'
+    testCompile 'junit:junit:4.12'
+}
+
+
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            name 'KickDrill'
+            description 'its for an android developer'
+            url 'https://github.com/kickdrilldev/androidkickdrill'
+            inceptionYear '2017'
+            packaging 'aar'
+            groupId 'com.app.kickdrill'
+            artifactId = artifactid
+            version = libversionname
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                connection 'https://github.com/kickdrilldev/androidkickdrill.git'
+                url 'https://github.com/kickdrilldev/androidkickdrill'
+
+            }
+            developers {
+                developer {
+                    name 'Vyankatesh Jadhav'
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    configurations = ['archives']
+    pkg {
+        repo = 'EasyAndroid'
+        name = 'androidkickdrill'
+        userOrg = 'androiddevs'
+        licenses = ['Apache-2.0']
+        publish = true
+        vcsUrl = 'https://github.com/kickdrilldev/androidkickdrill'
+        version {
+            name = 'androidKickdrill'
+            desc = 'its for an android developer'
+            vcsTag = libversionname
+            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
